@@ -50,6 +50,11 @@
             android:title="@string/stats_moving_time" />
 
         <SwitchPreferenceCompat
+            android:defaultValue="@bool/voice_announce_current_speed_pace_default"
+            android:key="@string/voice_announce_current_speed_pace_key"
+            android:title="@string/settings_announcements_current_speed_pace" />
+
+        <SwitchPreferenceCompat
             android:defaultValue="@bool/voice_announce_average_speed_pace_default"
             android:key="@string/voice_announce_average_speed_pace_key"
             android:title="@string/settings_announcements_average_speed_pace" />

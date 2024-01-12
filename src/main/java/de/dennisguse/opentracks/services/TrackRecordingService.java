@@ -256,6 +256,8 @@ public class TrackRecordingService extends Service implements TrackPointCreator.
         }
 
         boolean stored = trackRecordingManager.onNewTrackPoint(trackPoint);
+
+        voiceAnnouncementManager.setCurrentTrackPoint(trackPoint);
         notificationManager.updateTrackPoint(this, trackRecordingManager.getTrackStatistics(), trackPoint, thresholdHorizontalAccuracy);
         return stored;
     }

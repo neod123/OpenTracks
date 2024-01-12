@@ -55,6 +55,9 @@ public class VoiceAnnouncementManager implements SharedPreferences.OnSharedPrefe
 
     private static final Distance DISTANCE_OFF = Distance.of(Double.MAX_VALUE);
     private Distance distanceFrequency = DISTANCE_OFF;
+
+    private TrackPoint lastTrackPoint;
+
     @NonNull
     private Distance nextTotalDistance = DISTANCE_OFF;
 
@@ -155,7 +158,7 @@ public class VoiceAnnouncementManager implements SharedPreferences.OnSharedPrefe
             sensorStatistics = contentProviderUtils.getSensorStats(track.getId());
         }
 
-        return VoiceAnnouncementUtils.createStatistics(context, track.getTrackStatistics(), PreferencesUtils.getUnitSystem(), PreferencesUtils.isReportSpeed(track), lastInterval, sensorStatistics);
+        return VoiceAnnouncementUtils.createStatistics(context, track.getTrackStatistics(), lastTrackPoint.getSpeed(), PreferencesUtils.getUnitSystem(), PreferencesUtils.isReportSpeed(track), lastInterval, sensorStatistics);
     }
 
     public void stop() {
@@ -173,6 +176,11 @@ public class VoiceAnnouncementManager implements SharedPreferences.OnSharedPrefe
     public void setFrequency(Distance frequency) {
         this.distanceFrequency = frequency;
         update(this.trackStatistics);
+    }
+
+
+    public void setCurrentTrackPoint(TrackPoint trackpoint) {
+        this.lastTrackPoint = trackpoint;
     }
 
     public void updateNextTaskDistance() {

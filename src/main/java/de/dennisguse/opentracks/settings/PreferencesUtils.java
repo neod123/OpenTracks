@@ -404,6 +404,15 @@ public class PreferencesUtils {
         setBoolean(R.string.voice_announce_moving_time_key, value);
     }
 
+    public static boolean shouldVoiceAnnounceCurrentSpeedPace() {
+        return getBoolean(R.string.voice_announce_current_speed_pace_key, true);
+    }
+
+    @VisibleForTesting
+    public static void setVoiceAnnounceCurrentSpeedPace(boolean value) {
+        setBoolean(R.string.voice_announce_current_speed_pace_key, value);
+    }
+
     public static boolean shouldVoiceAnnounceAverageSpeedPace() {
         return getBoolean(R.string.voice_announce_average_speed_pace_key, true);
     }

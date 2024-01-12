@@ -3,6 +3,7 @@ package de.dennisguse.opentracks.services.announcement;
 import static android.text.Spanned.SPAN_INCLUSIVE_EXCLUSIVE;
 import static de.dennisguse.opentracks.settings.PreferencesUtils.shouldVoiceAnnounceAverageHeartRate;
 import static de.dennisguse.opentracks.settings.PreferencesUtils.shouldVoiceAnnounceAverageSpeedPace;
+import static de.dennisguse.opentracks.settings.PreferencesUtils.shouldVoiceAnnounceCurrentSpeedPace;
 import static de.dennisguse.opentracks.settings.PreferencesUtils.shouldVoiceAnnounceLapHeartRate;
 import static de.dennisguse.opentracks.settings.PreferencesUtils.shouldVoiceAnnounceLapSpeedPace;
 import static de.dennisguse.opentracks.settings.PreferencesUtils.shouldVoiceAnnounceMovingTime;
@@ -23,6 +24,7 @@ import java.util.Map;
 import de.dennisguse.opentracks.R;
 import de.dennisguse.opentracks.data.models.Distance;
 import de.dennisguse.opentracks.data.models.Speed;
+import de.dennisguse.opentracks.data.models.TrackPoint;
 import de.dennisguse.opentracks.settings.UnitSystem;
 import de.dennisguse.opentracks.stats.SensorStatistics;
 import de.dennisguse.opentracks.stats.TrackStatistics;
@@ -38,12 +40,12 @@ class VoiceAnnouncementUtils {
                 .append(context.getString(R.string.voiceIdle));
     }
 
-    static Spannable createStatistics(Context context, TrackStatistics trackStatistics, UnitSystem unitSystem, boolean isReportSpeed, @Nullable IntervalStatistics.Interval currentInterval, @Nullable SensorStatistics sensorStatistics) {
+    static Spannable createStatistics(Context context, TrackStatistics trackStatistics, Speed currentSpeed, UnitSystem unitSystem, boolean isReportSpeed, @Nullable IntervalStatistics.Interval currentInterval, @Nullable SensorStatistics sensorStatistics) {
         SpannableStringBuilder builder = new SpannableStringBuilder();
         Distance totalDistance = trackStatistics.getTotalDistance();
         Speed averageMovingSpeed = trackStatistics.getAverageMovingSpeed();
         Speed currentDistancePerTime = currentInterval != null ? currentInterval.getSpeed() : null;
-
+        Speed cSpeed = currentSpeed;
         int perUnitStringId;
         int distanceId;
         int speedId;
@@ -97,6 +99,18 @@ class VoiceAnnouncementUtils {
         }
 
         if (isReportSpeed) {
+
+            if(shouldVoiceAnnounceCurrentSpeedPace()) {
+
+
+                double speedInUnit = cSpeed.to(unitSystem);
+                builder.append("TEST ")
+                        .append(context.getString(R.string.speed));
+
+                 String template = context.getResources().getString(speedId);
+                 appendDecimalUnit(builder, MessageFormat.format(template, Map.of("n", speedInUnit)), speedInUnit, 1, unitSpeedTTS);
+                 builder.append(".");
+            }
             if (shouldVoiceAnnounceAverageSpeedPace()) {
                 double speedInUnit = averageMovingSpeed.to(unitSystem);
                 builder.append(" ")
